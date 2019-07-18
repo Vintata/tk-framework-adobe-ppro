@@ -557,7 +557,9 @@ sg_panel.Panel = new function() {
         if (photoshop_ids.indexOf(_cs_interface.getApplicationID()) > -1) {
             app_name = "Photoshop";
         } else if (_cs_interface.getApplicationID() == "AEFT") {
-            app_name = "AfterEffects"
+            app_name = "AfterEffects";
+        } else if (_cs_interface.getApplicationID() == "PPRO") {
+            app_name = "Premiere";
         } else {
             sg_logging.debug("Cannot make the app (un)persistent because the host application doesn't support it.");
             return false;

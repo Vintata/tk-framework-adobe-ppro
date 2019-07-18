@@ -171,6 +171,7 @@ sg_manager.Manager = new function() {
 
     // Tests whether the extension can run with the current application
     const _app_is_supported = function() {
+        return true;
 
         // supported if the panel menu and html extensions are available
         const host_capabilities = _cs_interface.getHostCapabilities();

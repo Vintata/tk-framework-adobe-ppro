@@ -268,6 +268,9 @@ class Communicator(object):
         """
         self.log_network_debug("Sending a call message using rpc_call...")
 
+        if params is None:
+            params = []
+
         if parent:
             params.insert(0, parent.uid)
             self.log_network_debug("Parent given, UID is %s" % parent.uid)
@@ -586,6 +589,7 @@ class Communicator(object):
         self.log_network_debug("Handling RPC response...")
 
         result = json.loads(response)
+
         uid = result["id"]
         self.log_network_debug("Response UID is %s" % uid)
 
@@ -674,7 +678,7 @@ class Communicator(object):
         for param in params:
             # TODO: Probably handle all iterables.
             if isinstance(param, list):
-                processed.extend(self.__prepare_params(param))
+                processed.append(self.__prepare_params(param))
             elif isinstance(param, ProxyWrapper):
                 processed.append(param.data)
             else:

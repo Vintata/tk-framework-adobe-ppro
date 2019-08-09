@@ -265,7 +265,11 @@ class ProxyWrapper(object):
         :param key: Some item key, whether it's an integer index or some bit
                     of hashable data.
         """
-        return self._communicator.rpc_get_index(self, key)
+        result = self._communicator.rpc_get_index(self, key)
+        if result is None:
+            raise IndexError
+
+        return result
 
     def __setattr__(self, name, value):
         """

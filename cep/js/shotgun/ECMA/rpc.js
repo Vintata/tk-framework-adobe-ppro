@@ -83,14 +83,14 @@ with their concrete-object equivalent.
 :param params: The list of arguments to prepare.
 */
 function prepare_arguments(params) {
-    prepped = [];
-    
+    var prepped = [];
+
     if (params == undefined) {
         return prepped;
     }
 
     for (var i=0; i<params.length; i++) {
-        arg = params[i];
+        var arg = params[i];
 
         if (arg instanceof Array) {
             prepped.push(prepare_arguments(arg));
@@ -278,8 +278,11 @@ unique id.
 */
 function rpc_get_index(uid, index) {
     var obj = __OBJECT_REGISTRY[uid];
-    var value = obj[index];
 
+    if (typeof obj[index] === 'undefined')
+        return JSON.stringify(wrap_item(null, index));
+
+    var value = obj[index];
     return JSON.stringify(wrap_item(value, index));
 }
 
@@ -358,7 +361,7 @@ function wrap_item(item, name) {
         if (typeof item == 'function') {
             return new FunctionWrapper(item, name);
         }
-        else if (typeof item != 'object') {
+        else if (item === null || typeof item != 'object') {
             return item;
         }
         else {

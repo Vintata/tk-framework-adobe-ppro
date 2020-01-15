@@ -65,6 +65,7 @@ sg_panel.Panel = new function() {
         _set_bg_color("#222222");
 
         _show_header(false);
+
         _set_contents(
             "<img id='loading_img' src='../images/sg_logo_with_text.png'>");
 
@@ -552,14 +553,25 @@ sg_panel.Panel = new function() {
     // Only valid for Photoshop.
     const _make_persistent = function(persistent) {
 
+        // Premiere Pro has its own way to specify persistence
+        if (_cs_interface.getApplicationID() == "PPRO") {
+            _cs_interface.evalScript(
+                "app.setExtensionPersistent('"
+                + _cs_interface.getExtensionID()
+                + "',"
+                + (persistent ? 1 : 0)
+                + ")",
+              function(){}
+            );
+            return true;
+        }
+
         const photoshop_ids = ["PHSP", "PHXS"];
         var app_name = "";
         if (photoshop_ids.indexOf(_cs_interface.getApplicationID()) > -1) {
             app_name = "Photoshop";
         } else if (_cs_interface.getApplicationID() == "AEFT") {
             app_name = "AfterEffects";
-        } else if (_cs_interface.getApplicationID() == "PPRO") {
-            app_name = "Premiere";
         } else {
             sg_logging.debug("Cannot make the app (un)persistent because the host application doesn't support it.");
             return false;
